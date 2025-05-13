@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./ViewTicket.css";
-import { getTickets } from "../../service/ticketService";
-import { useNavigate } from "react-router-dom";
+import { deleteTicket, getTickets } from "../../service/ticketService";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const ViewTicket = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  let serialCount = 1
   const nav = useNavigate()
   useEffect(() => {
     getTickets()
@@ -32,16 +32,24 @@ const ViewTicket = () => {
               <th>Booking Date</th>
               <th>Source</th>
               <th>Destination</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {tickets.map((ticket) => (
               <tr key={ticket.id}>
-                <td>{ticket.id}</td>
+                <td>{serialCount++}</td>
                 <td>{ticket.passengerName}</td>
                 <td>{ticket.bookingDate}</td>
                 <td>{ticket.sourcePlace}</td>
                 <td>{ticket.destinationPlace}</td>
+                <td>
+                  <Link to={`/update/${ticket.id}`}><button>Update</button></Link>| | 
+                  <button onClick={()=> {
+                      deleteTicket(ticket.id);
+                      nav(0)
+                  }}>Delete</button>
+                </td>
               </tr>
             ))}
           </tbody>
