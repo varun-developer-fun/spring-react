@@ -6,7 +6,6 @@ export const createTicket = (ticket) => {
   return axios.post(`${API_URL}/bookTicket`, ticket);
 };
 export const getTickets = () => {
-  localStorage.setItem("token","chbwshbdfjsdbfsqiendqnjef")
   return axios.get(`${API_URL}/getTickets`);
 };
 export const getTicketByID = (id) => {
@@ -23,5 +22,3 @@ export const deleteTicket = (id)=>{
         
     }
 }
-
-localStorage.setItem("token","chbwshbdfjsdbfsqiendqnjef")

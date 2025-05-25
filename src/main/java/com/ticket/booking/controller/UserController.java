@@ -1,5 +1,7 @@
 package com.ticket.booking.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +34,9 @@ public class UserController {
 	public User login(@RequestBody User user){
 		User existingUser = userService.findUserByUserName(user);
 		if(existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
+			String token = UUID.randomUUID().toString();
+			existingUser.setToken(token);
+			userService.registerUser(existingUser); // to update the token (not registering)
 			return existingUser;
 		}
 		return null;

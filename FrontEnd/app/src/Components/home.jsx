@@ -1,28 +1,54 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
+  const[username,setUsername] = useState("Guest")
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const nav = useNavigate();
+  useState(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user")
+    if (token) {
+      setIsLoggedIn(true);
+      if(user){
+        setUsername(JSON.parse(user).name)
+      }
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
-  const [userName, SetUserName] = useState("")
-
- useEffect(()=>{
-  const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
-  SetUserName(user.name)
-  
- },[])
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    nav("/");
+  };
   return (
     <>
       <div className="home-container">
         <header className="hero-section">
-          <h1>Welcome, {userName}</h1>
-        <Link to="/register" className="register">Register</Link>
-        <Link to="/login" className="login">Login</Link>
+          <h1>Welcome,{username}</h1>
+          {isLoggedIn ? (
+            <>
+              <button onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/register" className="register">
+                Register
+              </Link>
+              <Link to="/login" className="login">
+                Login
+              </Link>
+            </>
+          )}
+
           <h1>Welcome to BTree Bus Booking</h1>
           <p>Your gateway to seamless ticket booking</p>
           <Link to="/book" className="cta-button">
             Book Now
-          </Link> 
+          </Link>
           <Link to="/tickets" className="cta-button">
             View Tickets
           </Link>
